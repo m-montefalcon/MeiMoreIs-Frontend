@@ -1,0 +1,14 @@
+.hyperlink {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin: 10px;
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove default underline */
+  font-weight: bold; /* Make the text bold */
+  transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.hyperlink:hover {
+  color: #0056b3; /* Change color on hover */
+}
