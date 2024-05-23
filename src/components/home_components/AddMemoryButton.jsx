@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import ModalComponent from "./ModalComponent";
 
 const AddMemoryButton = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const triggerModal = () => {
+    setShowModal(!showModal);
+  };
+
   return (
     <>
       <div
@@ -23,11 +30,12 @@ const AddMemoryButton = () => {
             borderBlockColor: "grey",
             color: "white",
           }}
+          onClick={triggerModal}
         >
-          {" "}
-          <b> Save new memory</b>
+          <b> Post new memory</b>
         </Button>
       </div>
+      <ModalComponent show={showModal} handleClose={triggerModal} />
     </>
   );
 };
