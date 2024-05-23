@@ -4,7 +4,7 @@ MeiMoreIs is a social media platform that shares pictures resembling nostalgic m
 
 ## Tech Stack
 
-- **PostgreSQL:**
-- **React:** 
-- **Express:** 
-- **Node.js:** 
+- **PostgreSQL**
+- **React** 
+- **Express** 
+- **Node.js** 
