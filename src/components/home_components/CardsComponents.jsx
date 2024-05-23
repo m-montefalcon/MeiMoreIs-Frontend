@@ -18,7 +18,7 @@ const CardsComponents = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "65vh",
+        height: "550px",
       }}
     >
       <Card
@@ -67,7 +67,7 @@ const CardsComponents = () => {
           >
             <div onClick={toggleHeart} style={{ cursor: "pointer" }}>
               <FontAwesomeIcon
-                icon={solidHeart}
+                icon={isFilled ? regularHeart : solidHeart}
                 style={{
                   marginLeft: "10px",
                   marginRight: "5px",

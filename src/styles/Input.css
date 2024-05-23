@@ -1,5 +1,9 @@
 .input {
-  padding: 10px;
+  display: block; /* Change from flex to block */
+  margin: 0 auto;
+  padding: 12px;
+  margin-top: 20px;
+  margin-bottom: 15px;
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 16px;

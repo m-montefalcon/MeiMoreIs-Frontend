@@ -19,6 +19,11 @@ const LoginPage = () => {
   return (
     <>
       <div className="main-container">
+        <img
+          className="side-image"
+          src="../src/assets/butterfly.png"
+          alt="Butterfly"
+        />
         <div className="login-container">
           <h2 className="h2">Login</h2>
           <form onSubmit={onSubmitHandler}>

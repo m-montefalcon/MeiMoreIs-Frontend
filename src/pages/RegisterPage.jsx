@@ -14,8 +14,13 @@ const RegisterPage = () => {
   return (
     <>
       <div className="main-container">
+        <img
+          className="side-image"
+          src="../src/assets/butterfly.png"
+          alt="Butterfly"
+        />
         <div className="register-container">
-          <h2 className="h2">Login</h2>
+          <h2 className="h2">Sign Up</h2>
           <form>
             <Input type="text" placeHolder="Full name" />
             <Input type="email" placeHolder="Email address" />

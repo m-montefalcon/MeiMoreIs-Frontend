@@ -1,10 +1,10 @@
 .register-container {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px; /* Adjust width as needed */
-  padding: 20px;
+  right: 20%; /* Adjust the right distance as needed */
+  transform: translateY(-50%);
+  width: 500px; /* Increase the width as needed */
+  height: 500px; /* Increase the height as needed */
   border: 1px solid #ccc;
   background-color: #fff;
   border-radius: 5px;
@@ -16,7 +16,6 @@ h2 {
 }
 .main-container {
   height: 100vh;
-  background-image: url("../assets/wallpaper.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
