@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-
+import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 const CardsComponents = () => {
+  const [isFilled, setIsFilled] = useState(false);
+
+  const toggleHeart = () => {
+    setIsFilled(!isFilled);
+  };
+
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        height: "65vh",
       }}
     >
       <Card
@@ -21,6 +27,7 @@ const CardsComponents = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "#f9f9f9",
         }}
       >
         <Card.Body>
@@ -58,14 +65,17 @@ const CardsComponents = () => {
               marginTop: "10px",
             }}
           >
-            <FontAwesomeIcon
-              icon={faHeart}
-              style={{
-                marginLeft: "10px",
-                marginRight: "5px", // Adjusted margin for better spacing
-                fontSize: "24px", // Added font size to make the heart icon larger
-              }}
-            />
+            <div onClick={toggleHeart} style={{ cursor: "pointer" }}>
+              <FontAwesomeIcon
+                icon={solidHeart}
+                style={{
+                  marginLeft: "10px",
+                  marginRight: "5px",
+                  fontSize: "24px",
+                }}
+              />
+            </div>
+
             <p style={{ marginBottom: "0", marginTop: "0", marginLeft: "5px" }}>
               312,123 likes
             </p>

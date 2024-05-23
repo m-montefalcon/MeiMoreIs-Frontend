@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const NavBarComponent = () => {
   return (
-    <Navbar expand="lg" className="bg-light">
+    <Navbar expand="lg" style={{ backgroundColor: "#f9f9f9" }}>
       <Container>
         <Nav className="me-auto">{/* Add your leftmost Nav items here */}</Nav>
         <Navbar.Brand href="#home">MeiMoreis</Navbar.Brand>
