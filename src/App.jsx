@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
@@ -8,6 +8,9 @@ import "./styles/App.css";
 import LandingPage from "./pages/LandingPage";
 
 function App() {
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -15,7 +18,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-      </Routes>
+      </Routes>    b   
     </BrowserRouter>
   );
 }

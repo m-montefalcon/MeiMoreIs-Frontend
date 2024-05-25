@@ -17,7 +17,7 @@ const AddMemoryButton = () => {
           justifyContent: "center",
           alignItems: "center",
           alignContent: "center",
-          margin: 0,
+          marginTop: "3%",
         }}
       >
         <Button

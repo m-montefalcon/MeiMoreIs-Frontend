@@ -6,15 +6,29 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const NavBarComponent = () => {
+  const refreshPage = () => {
+    window.location.reload(); // Reload the page
+  };
+
   return (
-    <Navbar expand="lg" style={{ backgroundColor: "#f9f9f9" }}>
+    <Navbar
+      expand="lg"
+      style={{
+        backgroundColor: "#f9f9f9",
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        zIndex: 1000,
+      }}
+    >
       <Container>
         <Nav className="me-auto">{/* Add your leftmost Nav items here */}</Nav>
         <Navbar.Brand href="#home">MeiMoreIs</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link onClick={refreshPage}>Home</Nav.Link>{" "}
+            {/* Call refreshPage function */}
             <NavDropdown
               title={
                 <img
@@ -26,7 +40,6 @@ const NavBarComponent = () => {
               }
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href="#">My Profile</NavDropdown.Item>
               <NavDropdown.Item href="/login">Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
