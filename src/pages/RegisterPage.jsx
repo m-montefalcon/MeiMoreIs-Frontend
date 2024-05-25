@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import Input from "../components/InputComponent";
+import Button from "../components/ButtonComponent";
 import Hyperlink from "../components/Hyperlink";
 import "../styles/Register.css";
 const RegisterPage = () => {

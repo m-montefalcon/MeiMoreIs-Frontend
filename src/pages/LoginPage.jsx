@@ -1,19 +1,17 @@
 import React from "react";
 import "../../src/styles/Login.css";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import Input from "../components/InputComponent";
 import Hyperlink from "../components/Hyperlink";
 import { useNavigate } from "react-router-dom";
-
+import { Form, InputGroup, FormControl } from "react-bootstrap";
+import ButtonComponent from "../components/ButtonComponent";
 const LoginPage = () => {
   const navigateTo = useNavigate();
+
   const onSubmitHandler = (event) => {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-    // Perform any form processing logic here
-    console.log("href");
-    navigateTo("/home");
+    event.preventDefault(); // Prevent default form submission behavior
     console.log("Form submitted!");
+    navigateTo("/home");
   };
 
   return (
@@ -26,12 +24,12 @@ const LoginPage = () => {
         />
         <div className="login-container">
           <h2 className="h2">Login</h2>
-          <form onSubmit={onSubmitHandler}>
+          <Form onSubmit={onSubmitHandler}>
             <Input type="text" placeHolder="Username" />
             <Input type="password" placeHolder="Password" />
-            <Button text="Login" onClick={onSubmitHandler} />
+            <ButtonComponent text="Login" />
             <Hyperlink text="Register Instead" link="/register" />
-          </form>
+          </Form>
         </div>
       </div>
     </>
