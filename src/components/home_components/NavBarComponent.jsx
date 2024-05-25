@@ -40,6 +40,7 @@ const NavBarComponent = () => {
               }
               id="basic-nav-dropdown"
             >
+              <NavDropdown.Item>My Profile</NavDropdown.Item>
               <NavDropdown.Item href="/login">Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>

@@ -5,6 +5,9 @@ import Hyperlink from "../components/Hyperlink";
 import { useNavigate } from "react-router-dom";
 import { Form, InputGroup, FormControl } from "react-bootstrap";
 import ButtonComponent from "../components/ButtonComponent";
+import { Row, Container, Col } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 const LoginPage = () => {
   const navigateTo = useNavigate();
 
@@ -24,12 +27,22 @@ const LoginPage = () => {
         />
         <div className="login-container">
           <h2 className="h2">Login</h2>
-          <Form onSubmit={onSubmitHandler}>
-            <Input type="text" placeHolder="Username" />
-            <Input type="password" placeHolder="Password" />
-            <ButtonComponent text="Login" />
-            <Hyperlink text="Register Instead" link="/register" />
-          </Form>
+          <Container>
+            <Form onSubmit={onSubmitHandler}>
+              <Input
+                type="text"
+                placeHolder="Username"
+                logo=<FontAwesomeIcon icon={faEnvelope} />
+              />
+              <Input
+                type="password"
+                placeHolder="Password"
+                logo=<FontAwesomeIcon icon={faKey} />
+              />
+              <ButtonComponent text="Login" />
+              <Hyperlink text="Register Instead" link="/register" />
+            </Form>
+          </Container>
         </div>
       </div>
     </>
