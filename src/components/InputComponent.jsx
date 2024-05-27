@@ -10,6 +10,11 @@ const InputComponent = (props) => {
           <InputGroup.Text id="basic-addon1">{props.logo}</InputGroup.Text>
         )}
         <FormControl
+          name={props.name}
+          value={props.value}
+          onChange={(event) => {
+            props.handleEvent(event); // Invoke the onChange function with the event
+          }}
           type={props.type}
           placeholder={props.placeHolder}
           aria-label="Username"
