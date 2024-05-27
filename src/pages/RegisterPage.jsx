@@ -35,10 +35,16 @@ const RegisterPage = () => {
 
   const handleAvatarChange = (event) => {
     const selectedFile = event.target.files[0];
-    setFormData({
-      ...formData,
-      avatar: URL.createObjectURL(selectedFile),
-    });
+
+    // Read the selected file and convert it to a data URL
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData({
+        ...formData,
+        avatar: reader.result, // Set the data URL as the avatar in the state
+      });
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
   const navigateToRegisterFunction = () => {
@@ -49,11 +55,14 @@ const RegisterPage = () => {
     event.preventDefault(); // Prevent default form submission behavior
     // Handle form submission logic
     try {
-      console.log(formData);
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
 
       const result = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API_ENDPOINT}/user/register`,
-        formData,
+        `${baseUrl}/user/register`,
+        formDataToSend,
         {
           headers: {
             "Content-Type": "multipart/form-data",
