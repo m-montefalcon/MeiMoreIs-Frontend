@@ -20,7 +20,7 @@ const RegisterPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    avatar: null,
+    image: null,
   });
 
   const navigateTo = useNavigate();
@@ -41,7 +41,7 @@ const RegisterPage = () => {
     reader.onload = () => {
       setFormData({
         ...formData,
-        avatar: reader.result, // Set the data URL as the avatar in the state
+        image: reader.result, // Set the data URL as the avatar in the state
       });
     };
     reader.readAsDataURL(selectedFile);
@@ -116,9 +116,9 @@ const RegisterPage = () => {
                       cursor: "pointer",
                     }}
                   >
-                    {formData.avatar ? (
+                    {formData.image ? (
                       <img
-                        src={formData.avatar}
+                        src={formData.image}
                         alt="Selected Avatar"
                         style={{
                           width: "100%",
