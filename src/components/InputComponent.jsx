@@ -19,7 +19,9 @@ const InputComponent = (props) => {
           placeholder={props.placeHolder}
           aria-label="Username"
           aria-describedby="basic-addon1"
+          minLength={props.minLength}
           required
+          disabled={props.disabled}
         />
       </InputGroup>
     </>

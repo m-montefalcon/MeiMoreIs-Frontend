@@ -7,7 +7,7 @@ import axios from "axios";
 import Input from "../components/InputComponent";
 import Button from "../components/ButtonComponent";
 import Hyperlink from "../components/Hyperlink";
-
+import AvatarInput from "../components/AvatarInput";
 import "../styles/Register.css";
 
 const RegisterPage = () => {
@@ -23,6 +23,12 @@ const RegisterPage = () => {
     image: null,
   });
 
+  // State for form submission status
+  const [submitting, setSubmitting] = useState(false);
+
+  // State for displaying the image
+  const [imageURL, setImageURL] = useState(null);
+
   const navigateTo = useNavigate();
 
   const handleInputChange = (event) => {
@@ -36,25 +42,36 @@ const RegisterPage = () => {
   const handleAvatarChange = (event) => {
     const selectedFile = event.target.files[0];
 
-    // Read the selected file and convert it to a data URL
-    const reader = new FileReader();
-    reader.onload = () => {
-      setFormData({
-        ...formData,
-        image: reader.result, // Set the data URL as the avatar in the state
-      });
-    };
-    reader.readAsDataURL(selectedFile);
+    // Store the file object in formData
+    setFormData({
+      ...formData,
+      image: selectedFile,
+    });
+
+    // Create a URL for the selected file and store it in imageURL
+    setImageURL(URL.createObjectURL(selectedFile));
   };
 
   const navigateToRegisterFunction = () => {
     navigateTo("/login");
   };
 
+  const clearFormData = async () => {
+    await setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      image: null,
+    });
+    window.location.reload(); // Reload the page
+  };
   const submitForm = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    // Handle form submission logic
+    event.preventDefault();
     try {
+      setSubmitting(true); // Start form submission
+
       const formDataToSend = new FormData();
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
@@ -69,17 +86,19 @@ const RegisterPage = () => {
           },
         }
       );
-
+      
       if (result.status === 200) {
         console.log(result.data);
+        await clearFormData();
       } else {
         console.log(result.data);
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setSubmitting(false); // End form submission
     }
   };
-
   return (
     <div className="main-container">
       <img
@@ -95,49 +114,9 @@ const RegisterPage = () => {
           <Container>
             <Row className="justify-content-center">
               <Col xs={12} className="text-center" style={{ width: "23%" }}>
-                <div
-                  className="avatar-container"
-                  style={{ padding: "0px" }}
-                  onClick={() =>
-                    document.getElementById("avatar-input").click()
-                  }
-                >
-                  <div
-                    className="avatar"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: "20px",
-                      width: "100px",
-                      height: "100px",
-                      borderRadius: "50%",
-                      border: "2px solid #ccc",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {formData.image ? (
-                      <img
-                        src={formData.image}
-                        alt="Selected Avatar"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    ) : (
-                      <FontAwesomeIcon icon={faUser} />
-                    )}
-                  </div>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  style={{ display: "none" }}
-                  id="avatar-input"
+                <AvatarInput
+                  imageURL={imageURL}
+                  handleAvatarChange={handleAvatarChange}
                 />
               </Col>
             </Row>
@@ -148,6 +127,7 @@ const RegisterPage = () => {
                   name="firstName"
                   placeHolder="First name"
                   handleEvent={handleInputChange}
+                  disabled={submitting} // Disable input when submitting
                 />
               </Col>
               <Col xs={6}>
@@ -156,6 +136,7 @@ const RegisterPage = () => {
                   name="lastName"
                   placeHolder="Last name"
                   handleEvent={handleInputChange}
+                  disabled={submitting} // Disable input when submitting
                 />
               </Col>
             </Row>
@@ -165,6 +146,8 @@ const RegisterPage = () => {
               placeHolder="Email address"
               logo={<FontAwesomeIcon icon={faEnvelope} />}
               handleEvent={handleInputChange}
+              minLength="6"
+              disabled={submitting} // Disable input when submitting
             />
             <Input
               type="password"
@@ -172,6 +155,8 @@ const RegisterPage = () => {
               placeHolder="Password"
               logo={<FontAwesomeIcon icon={faKey} />}
               handleEvent={handleInputChange}
+              minLength="8"
+              disabled={submitting} // Disable input when submitting
             />
             <Input
               type="password"
@@ -179,8 +164,10 @@ const RegisterPage = () => {
               placeHolder="Confirm password"
               logo={<FontAwesomeIcon icon={faKey} />}
               handleEvent={handleInputChange}
+              minLength="8"
+              disabled={submitting} // Disable input when submitting
             />
-            <Button text="Register" />
+            <Button text="Register" disabled={submitting} />
             <Hyperlink text="Login Instead" link="/login" />
           </Container>
         </form>

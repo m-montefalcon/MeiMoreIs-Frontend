@@ -5,7 +5,11 @@ import ButtonBootstrap from "react-bootstrap/Button";
 const ButtonComponent = (props) => {
   return (
     <div className="button-container">
-      <ButtonBootstrap variant="primary" type="submit">
+      <ButtonBootstrap
+        variant="primary"
+        type="submit"
+        disabled={props.disabled}
+      >
         {props.text}
       </ButtonBootstrap>
     </div>
