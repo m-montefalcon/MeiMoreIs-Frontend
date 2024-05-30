@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../src/styles/Login.css";
 import Input from "../components/InputComponent";
 import Hyperlink from "../components/Hyperlink";
@@ -8,13 +8,51 @@ import ButtonComponent from "../components/ButtonComponent";
 import { Row, Container, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-const LoginPage = () => {
-  const navigateTo = useNavigate();
+import axios from "axios";
 
-  const onSubmitHandler = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    console.log("Form submitted!");
-    navigateTo("/home");
+const LoginPage = () => {
+  const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const clearFormData = async () => {
+    await setFormData({
+      email: "",
+      password: "",
+    });
+  };
+  const navigateTo = useNavigate();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      setSubmitting(true); // Start form submission
+      const result = await axios.post(`${baseUrl}/user/login`, formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded", // Change to form data type
+        },
+      });
+      if (result.status === 200) {
+        console.log(result.data);
+        await clearFormData;
+        navigateTo("/home");
+      } else {
+        console.log(result.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setSubmitting(false); // End form submission
+    }
   };
 
   return (
@@ -30,14 +68,22 @@ const LoginPage = () => {
           <Container>
             <Form onSubmit={onSubmitHandler}>
               <Input
+                name="email"
                 type="text"
                 placeHolder="Username"
                 logo=<FontAwesomeIcon icon={faEnvelope} />
+                handleEvent={handleInputChange}
+                minLength="8"
+                disabled={submitting}
               />
               <Input
+                name="password"
                 type="password"
                 placeHolder="Password"
                 logo=<FontAwesomeIcon icon={faKey} />
+                handleEvent={handleInputChange}
+                minLength="8"
+                disabled={submitting}
               />
               <ButtonComponent text="Login" />
               <Hyperlink text="Register Instead" link="/register" />
