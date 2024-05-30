@@ -9,6 +9,8 @@ import { Row, Container, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { saveUserDataToLocalStorage } from "../util/localStorageUtils.js";
+axios.defaults.withCredentials = true; // Send cookies with requests
 
 const LoginPage = () => {
   const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
@@ -42,8 +44,8 @@ const LoginPage = () => {
         },
       });
       if (result.status === 200) {
-        console.log(result.data);
-        await clearFormData;
+        saveUserDataToLocalStorage(result.data);
+        await clearFormData();
         navigateTo("/home");
       } else {
         console.log(result.data);
