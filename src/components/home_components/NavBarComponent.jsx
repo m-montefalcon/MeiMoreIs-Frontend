@@ -1,15 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { removeUserDataFromLocalStorage } from "../../util/localStorageUtils.js";
 
-const NavBarComponent = () => {
+const NavBarComponent = (props) => {
+  const navigateTo = useNavigate();
   const refreshPage = () => {
     window.location.reload(); // Reload the page
   };
 
+  const onLogout = () => {
+    removeUserDataFromLocalStorage();
+    navigateTo("/login");
+  };
   return (
     <Navbar
       expand="lg"
@@ -40,8 +47,8 @@ const NavBarComponent = () => {
               }
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item>My Profile</NavDropdown.Item>
-              <NavDropdown.Item href="/login">Logout</NavDropdown.Item>
+              <NavDropdown.Item>{props.name}</NavDropdown.Item>
+              <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
