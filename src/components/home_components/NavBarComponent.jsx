@@ -29,17 +29,16 @@ const NavBarComponent = (props) => {
       }}
     >
       <Container>
-        <Nav className="me-auto">{/* Add your leftmost Nav items here */}</Nav>
+        <Nav className="me-auto"></Nav>
         <Navbar.Brand href="#home">MeiMoreIs</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Nav.Link onClick={refreshPage}>Home</Nav.Link>{" "}
-            {/* Call refreshPage function */}
             <NavDropdown
               title={
                 <img
-                  src="https://i8.amplience.net/i/naras/MI0004224402-MN0002709646"
+                  src={props.image}
                   className="rounded-circle"
                   alt="User"
                   style={{ width: "20px", height: "20px" }}
