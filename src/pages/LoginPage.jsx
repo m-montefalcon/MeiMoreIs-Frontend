@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../src/styles/Login.css";
-import Input from "../components/InputComponent";
+import InputComponent from "../components/InputComponent";
 import Hyperlink from "../components/Hyperlink";
 import { useNavigate } from "react-router-dom";
 import { Form, InputGroup, FormControl } from "react-bootstrap";
@@ -69,7 +69,7 @@ const LoginPage = () => {
           <h2 className="h2">Login</h2>
           <Container>
             <Form onSubmit={onSubmitHandler}>
-              <Input
+              <InputComponent
                 name="email"
                 type="text"
                 placeHolder="Username"
@@ -78,7 +78,7 @@ const LoginPage = () => {
                 minLength="8"
                 disabled={submitting}
               />
-              <Input
+              <InputComponent
                 name="password"
                 type="password"
                 placeHolder="Password"
