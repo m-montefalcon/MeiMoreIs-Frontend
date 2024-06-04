@@ -73,7 +73,6 @@ const ModalComponent = ({ show, handleClose }) => {
       const result = await axios.post(`${baseUrl}/post`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
