@@ -6,33 +6,46 @@ import AddMemoryButton from "../components/home_components/AddMemoryButton";
 import { getUserDataFromLocalStorage } from "../util/localStorageUtils.js";
 import { firebaseApp } from "../../service/firebaseConfig";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import axios from "axios";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
-
+  const [apiData, setApiData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const data = getUserDataFromLocalStorage();
-      if (!data) {
+      const userData = getUserDataFromLocalStorage();
+      if (!userData) {
         navigate("/login");
       } else {
         setLoading(false);
-        setData(data);
+        setData(userData);
         // Fetch image URL from Firebase Storage
         const storage = getStorage(firebaseApp);
         const imageUrl = await getImageUrl(
           storage,
-          `meimoreis/user/${data.userData.profilePicture}`
+          `meimoreis/user/${userData.userData.profilePicture}`
         );
         setImageUrl(imageUrl);
+
+        // Axios GET request
+        try {
+          const response = await axios.get("http://localhost:8000/post", {
+            withCredentials: true,
+          });
+          console.log("Data from API:", response.data);
+          setApiData(response.data); // Set the fetched data to state
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          // Handle the error appropriately
+        }
       }
     };
 
     fetchData();
-  }, [navigate]);
+  }, []); //Disable dependencies on useEffect
 
   // Define the getImageUrl function
   const getImageUrl = async (storage, imagePath) => {
@@ -45,6 +58,7 @@ const HomePage = () => {
       return null;
     }
   };
+
   return (
     <>
       {loading ? (
@@ -63,9 +77,9 @@ const HomePage = () => {
             image={imageUrl}
           />
           <AddMemoryButton />
-          <CardsComponents />
-          <CardsComponents />
-          <CardsComponents />
+          {apiData.map((data, index) => (
+            <CardsComponents key={index} data={data} />
+          ))}
         </div>
       )}
     </>
