@@ -8,7 +8,7 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import { useEffect } from "react";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { firebaseApp } from "../../../service/firebaseConfig";
-
+import { getUserDataFromLocalStorage } from "../../util/localStorageUtils";
 const CardsComponents = (props) => {
   const [isFilled, setIsFilled] = useState(false);
   const [profileUrl, setProfileUrl] = useState(null);
@@ -31,23 +31,50 @@ const CardsComponents = (props) => {
     setIsFilled(!isFilled);
   };
   useEffect(() => {
-    const fetchData = async () => {
-      const storage = getStorage(firebaseApp);
-      const imageUrl = await getImageUrl(
-        storage,
-        `meimoreis/user/${props.data.profile_picture}`
-      );
-      setProfileUrl(imageUrl);
+    let isMounted = true;
 
-      const contentImage = await getImageUrl(
-        storage,
-        `meimoreis/post/${props.data.image}`
-      );
-      setContentUrl(contentImage);
+    const fetchData = async () => {
+      try {
+        const storage = getStorage(firebaseApp);
+        const imageUrl = await getImageUrl(
+          storage,
+          `meimoreis/user/${props.data.profile_picture}`
+        );
+        const contentImage = await getImageUrl(
+          storage,
+          `meimoreis/post/${props.data.image}`
+        );
+        if (isMounted) {
+          setProfileUrl(imageUrl);
+          setContentUrl(contentImage);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
+    const checkIfLiked = async () => {
+      try {
+        const currentUser = await getUserDataFromLocalStorage();
+        const users = props.data.user_ids;
+        const checkUser = users.find(
+          (user) => user === currentUser.userData.id
+        );
+        if (isMounted) {
+          setIsFilled(!!checkUser);
+        }
+      } catch (error) {
+        console.error("Error checking if liked:", error);
+      }
+    };
+
+    checkIfLiked();
     fetchData();
-  }, []);
+
+    return () => {
+      isMounted = false; // Cleanup function to prevent state updates on unmounted components
+    };
+  }, [props.data]); // Add props.data as dependency if fetchData and checkIfLiked depend on it
 
   // Define the getImageUrl function
   const getImageUrl = async (storage, imagePath) => {
@@ -116,7 +143,6 @@ const CardsComponents = (props) => {
               </Card.Text>
 
               <div style={{ overflow: "hidden", marginBottom: "10px" }}>
-                {" "}
                 <img
                   src={contentUrl}
                   alt="Post Image"
@@ -133,7 +159,7 @@ const CardsComponents = (props) => {
               >
                 <div onClick={toggleHeart} style={{ cursor: "pointer" }}>
                   <FontAwesomeIcon
-                    icon={isFilled ? regularHeart : solidHeart}
+                    icon={isFilled ? solidHeart : regularHeart}
                     style={{
                       marginLeft: "10px",
                       marginRight: "5px",
@@ -148,7 +174,7 @@ const CardsComponents = (props) => {
                     marginLeft: "5px",
                   }}
                 >
-                  312,123 likes
+                  {props.data.counts} likes
                 </p>
               </div>
             </Card.Body>
