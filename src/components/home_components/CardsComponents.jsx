@@ -1,82 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
-import { useEffect } from "react";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { firebaseApp } from "../../../service/firebaseConfig";
 import { getUserDataFromLocalStorage } from "../../util/localStorageUtils";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+
 const CardsComponents = (props) => {
   const [isFilled, setIsFilled] = useState(false);
   const [profileUrl, setProfileUrl] = useState(null);
   const [contentUrl, setContentUrl] = useState(null);
+  const [likes, setLikes] = useState(parseInt(props.data.counts));
 
-  const formattedTimestamp =
-    new Date(props.data.timestamp).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    }) +
-    " " +
-    new Date(props.data.timestamp).toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
+  // Memoize formatted timestamp
+  const formattedTimestamp = useMemo(() => {
+    return (
+      new Date(props.data.timestamp).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }) +
+      " " +
+      new Date(props.data.timestamp).toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      })
+    );
+  }, [props.data.timestamp]);
 
-  const toggleHeart = () => {
-    setIsFilled(!isFilled);
-  };
-  useEffect(() => {
-    let isMounted = true;
+  const toggleHeart = async (postId) => {
+    const currentUser = await getUserDataFromLocalStorage();
 
-    const fetchData = async () => {
-      try {
-        const storage = getStorage(firebaseApp);
-        const imageUrl = await getImageUrl(
-          storage,
-          `meimoreis/user/${props.data.profile_picture}`
-        );
-        const contentImage = await getImageUrl(
-          storage,
-          `meimoreis/post/${props.data.image}`
-        );
-        if (isMounted) {
-          setProfileUrl(imageUrl);
-          setContentUrl(contentImage);
+    try {
+      const result = await axios.post(
+        `${baseUrl}/like`,
+        {
+          postId: postId,
+          userId: currentUser.userData.id,
+        },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          withCredentials: true,
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      );
+      if (result.status === 200) {
+        setLikes((prevState) => prevState + 1);
+        setIsFilled(true);
       }
+    } catch (error) {
+      console.error("Failed to toggle heart:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const storage = getStorage(firebaseApp);
+      const profileImageUrl = await getImageUrl(
+        storage,
+        `meimoreis/user/${props.data.profile_picture}`
+      );
+      const contentImageUrl = await getImageUrl(
+        storage,
+        `meimoreis/post/${props.data.image}`
+      );
+      setProfileUrl(profileImageUrl);
+      setContentUrl(contentImageUrl);
     };
 
     const checkIfLiked = async () => {
-      try {
-        const currentUser = await getUserDataFromLocalStorage();
-        const users = props.data.user_ids;
-        const checkUser = users.find(
-          (user) => user === currentUser.userData.id
-        );
-        if (isMounted) {
-          setIsFilled(!!checkUser);
-        }
-      } catch (error) {
-        console.error("Error checking if liked:", error);
-      }
+      const currentUser = await getUserDataFromLocalStorage();
+      const users = props.data.user_ids;
+      const checkUser = users.find((user) => user === currentUser.userData.id);
+      setIsFilled(!!checkUser);
     };
 
-    checkIfLiked();
     fetchData();
+    checkIfLiked();
 
-    return () => {
-      isMounted = false; // Cleanup function to prevent state updates on unmounted components
-    };
-  }, [props.data]); // Add props.data as dependency if fetchData and checkIfLiked depend on it
+  }, [props.data]);
 
-  // Define the getImageUrl function
   const getImageUrl = async (storage, imagePath) => {
     try {
       const imageRef = ref(storage, imagePath);
@@ -95,18 +105,17 @@ const CardsComponents = (props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: "20px", // Add margin between cards
+            marginBottom: "20px",
           }}
         >
           <Card
             style={{
               width: "500px",
               backgroundColor: "#f9f9f9",
-              marginBottom: "20px", // Add margin between cards
+              marginBottom: "20px",
             }}
           >
             <Card.Body>
-              {/* Profile information */}
               <div
                 style={{
                   display: "flex",
@@ -115,14 +124,15 @@ const CardsComponents = (props) => {
                 }}
               >
                 <img
-                  src={profileUrl}
+                  loading="lazy"
+                  src={profileUrl || ""}
                   className="rounded-circle"
-                  alt="..."
+                  alt=""
                   style={{
                     width: "50px",
                     height: "50px",
                     marginRight: "10px",
-                    flexShrink: 0, // Prevent image from resizing
+                    flexShrink: 0,
                   }}
                 />
                 <div>
@@ -137,19 +147,17 @@ const CardsComponents = (props) => {
                   </Card.Subtitle>
                 </div>
               </div>
-
               <Card.Text className="mt-3" style={{ marginBottom: "10px" }}>
                 {props.data.content}
               </Card.Text>
-
               <div style={{ overflow: "hidden", marginBottom: "10px" }}>
                 <img
-                  src={contentUrl}
+                  loading="lazy"
+                  src={contentUrl || ""}
                   alt="Post Image"
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }} // Set a fixed height for the image and adjust object-fit
+                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
               </div>
-
               <div
                 style={{
                   display: "flex",
@@ -157,7 +165,10 @@ const CardsComponents = (props) => {
                   marginTop: "10px",
                 }}
               >
-                <div onClick={toggleHeart} style={{ cursor: "pointer" }}>
+                <div
+                  onClick={() => toggleHeart(props.data.post_id)}
+                  style={{ cursor: "pointer" }}
+                >
                   <FontAwesomeIcon
                     icon={isFilled ? solidHeart : regularHeart}
                     style={{
@@ -174,7 +185,7 @@ const CardsComponents = (props) => {
                     marginLeft: "5px",
                   }}
                 >
-                  {props.data.counts} likes
+                  {likes} likes
                 </p>
               </div>
             </Card.Body>
