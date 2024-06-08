@@ -27,6 +27,7 @@ const AvatarInput = ({ imageURL, handleAvatarChange }) => {
       >
         {imageURL ? (
           <img
+            loading="lazy"
             src={imageURL}
             alt="Selected Avatar"
             style={{

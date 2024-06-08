@@ -38,6 +38,7 @@ const NavBarComponent = (props) => {
             <NavDropdown
               title={
                 <img
+                  loading="lazy"
                   src={props.image}
                   className="rounded-circle"
                   alt="User"
