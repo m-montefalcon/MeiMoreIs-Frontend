@@ -7,6 +7,7 @@ import { getUserDataFromLocalStorage } from "../util/localStorageUtils.js";
 import { firebaseApp } from "../../service/firebaseConfig";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import axios from "axios";
+const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const HomePage = () => {
 
         // Axios GET request
         try {
-          const response = await axios.get("http://localhost:8000/post", {
+          const response = await axios.get(`${baseUrl}/post`, {
             withCredentials: true,
           });
           console.log("Data from API:", response.data);
