@@ -102,6 +102,7 @@ const RegisterPage = () => {
   return (
     <div className="main-container">
       <img
+        loading="lazy"
         className="side-image"
         src="../src/assets/butterfly.png"
         alt="Butterfly"
