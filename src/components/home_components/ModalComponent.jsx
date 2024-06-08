@@ -35,6 +35,16 @@ const ModalComponent = ({ show, handleClose }) => {
 
     fetchData();
   }, []); // Empty dependency array to run only once after initial render
+
+  const resetForm = () => {
+    setContentImageUrl(null); // Reset the image URL
+    setFormData({
+      userId: "",
+      contentImage: null,
+      content: "", // Set content to an empty string
+    });
+  };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -51,11 +61,7 @@ const ModalComponent = ({ show, handleClose }) => {
   };
 
   const handleModalClose = () => {
-    setFormData({
-      userId: null,
-      contentImage: null,
-      content: "", // Set content to an empty string
-    });
+    resetForm(); // Reset the form when modal is closed
     handleClose();
   };
 
@@ -114,6 +120,7 @@ const ModalComponent = ({ show, handleClose }) => {
           {contentImageUrl && (
             <div className="text-center">
               <img
+                loading="lazy"
                 src={contentImageUrl}
                 alt="Selected"
                 style={{ maxWidth: "100%", maxHeight: "300px" }}
