@@ -15,33 +15,35 @@ const HomePage = () => {
   const [data, setData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [apiData, setApiData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const userData = getUserDataFromLocalStorage();
-      if (!userData) {
-        navigate("/login");
-      } else {
-        setLoading(false);
-        setData(userData);
-        // Fetch image URL from Firebase Storage
-        const storage = getStorage(firebaseApp);
-        const imageUrl = await getImageUrl(
-          storage,
-          `meimoreis/user/${userData.userData.profilePicture}`
-        );
-        setImageUrl(imageUrl);
 
-        // Axios GET request
-        try {
-          const response = await axios.get(`${baseUrl}/post`, {
-            withCredentials: true,
-          });
-          console.log("Data from API:", response.data);
-          setApiData(response.data); // Set the fetched data to state
-        } catch (error) {
-          console.error("Error fetching data:", error);
-          // Handle the error appropriately
-        }
+  useEffect(() => {
+    const userData = getUserDataFromLocalStorage();
+    if (!userData) {
+      navigate("/login"); // Redirect to login page if not authenticated
+      return; // Return early to prevent further execution
+    }
+
+    const fetchData = async () => {
+      setLoading(false);
+      setData(userData);
+      // Fetch image URL from Firebase Storage
+      const storage = getStorage(firebaseApp);
+      const imageUrl = await getImageUrl(
+        storage,
+        `meimoreis/user/${userData.userData.profilePicture}`
+      );
+      setImageUrl(imageUrl);
+
+      // Axios GET request
+      try {
+        const response = await axios.get(`${baseUrl}/post`, {
+          withCredentials: true,
+        });
+        console.log("Data from API:", response.data);
+        setApiData(response.data); // Set the fetched data to state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error appropriately
       }
     };
 
