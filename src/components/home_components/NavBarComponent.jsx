@@ -54,9 +54,12 @@ const NavBarComponent = (props) => {
               }
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item onClick={() => navigate('/profile')}>
-                {props.name}
-              </NavDropdown.Item>
+              {props.name && (
+                <NavDropdown.Item onClick={() => navigate('/profile')}>
+                  {props.name}
+                </NavDropdown.Item>
+              )}
+
               <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
