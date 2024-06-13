@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import { firebaseApp } from '../../service/firebaseConfig';
-import { getUserDataFromLocalStorage } from '../util/localStorageUtils';
+import { firebaseApp } from '../service/firebaseConfig';
+import { getUserDataFromLocalStorage } from '../src/util/localStorageUtils';
 
 const useUserData = () => {
   const navigate = useNavigate();
