@@ -1,71 +1,65 @@
-import React, { useState } from "react";
-import "../../src/styles/Login.css";
-import InputComponent from "../components/InputComponent";
-import Hyperlink from "../components/Hyperlink";
-import { useNavigate } from "react-router-dom";
-import { Form, InputGroup, FormControl } from "react-bootstrap";
-import ButtonComponent from "../components/ButtonComponent";
-import { Row, Container, Col } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import { saveUserDataToLocalStorage } from "../util/localStorageUtils.js";
-axios.defaults.withCredentials = true; // Send cookies with requests
+import React, { useState } from 'react'
+import '../../src/styles/Login.css'
+import InputComponent from '../components/InputComponent'
+import Hyperlink from '../components/Hyperlink'
+import { useNavigate } from 'react-router-dom'
+import { Form, InputGroup, FormControl } from 'react-bootstrap'
+import ButtonComponent from '../components/ButtonComponent'
+import { Row, Container, Col } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import { saveUserDataToLocalStorage } from '../util/localStorageUtils.js'
+axios.defaults.withCredentials = true // Send cookies with requests
 
 const LoginPage = () => {
-  const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+  const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [submitting, setSubmitting] = useState(false);
+    email: '',
+    password: '',
+  })
+  const [submitting, setSubmitting] = useState(false)
   const clearFormData = async () => {
     await setFormData({
-      email: "",
-      password: "",
-    });
-  };
-  const navigateTo = useNavigate();
+      email: '',
+      password: '',
+    })
+  }
+  const navigateTo = useNavigate()
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
+    })
+  }
   const onSubmitHandler = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      setSubmitting(true); // Start form submission
+      setSubmitting(true) // Start form submission
       const result = await axios.post(`${baseUrl}/user/login`, formData, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded", // Change to form data type
+          'Content-Type': 'application/x-www-form-urlencoded', // Change to form data type
         },
-      });
+      })
       if (result.status === 200) {
-        saveUserDataToLocalStorage(result.data);
-        await clearFormData();
-        navigateTo("/home");
+        saveUserDataToLocalStorage(result.data)
+        await clearFormData()
+        navigateTo('/home')
       } else {
-        console.log(result.data);
+        console.log(result.data)
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error)
     } finally {
-      setSubmitting(false); // End form submission
+      setSubmitting(false) // End form submission
     }
-  };
+  }
 
   return (
     <>
       <div className="main-container">
-        <img
-          loading="lazy"
-          className="side-image"
-          src="../src/assets/butterfly.png"
-          alt="Butterfly"
-        />
         <div className="login-container">
           <h2 className="h2">Login</h2>
           <Container>
@@ -95,7 +89,7 @@ const LoginPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

@@ -1,80 +1,80 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Row, Container, Col } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey, faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import Input from "../components/InputComponent";
-import Button from "../components/ButtonComponent";
-import Hyperlink from "../components/Hyperlink";
-import AvatarInput from "../components/AvatarInput";
-import "../styles/Register.css";
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Row, Container, Col } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faKey, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import Input from '../components/InputComponent'
+import Button from '../components/ButtonComponent'
+import Hyperlink from '../components/Hyperlink'
+import AvatarInput from '../components/AvatarInput'
+import '../styles/Register.css'
 
 const RegisterPage = () => {
-  const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT;
+  const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT
 
   // State for form data
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     image: null,
-  });
+  })
 
   // State for form submission status
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false)
 
   // State for displaying the image
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState(null)
 
-  const navigateTo = useNavigate();
+  const navigateTo = useNavigate()
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleAvatarChange = (event) => {
-    const selectedFile = event.target.files[0];
+    const selectedFile = event.target.files[0]
 
     // Store the file object in formData
     setFormData({
       ...formData,
       image: selectedFile,
-    });
+    })
 
     // Create a URL for the selected file and store it in imageURL
-    setImageURL(URL.createObjectURL(selectedFile));
-  };
+    setImageURL(URL.createObjectURL(selectedFile))
+  }
 
   const navigateToRegisterFunction = () => {
-    navigateTo("/login");
-  };
+    navigateTo('/login')
+  }
 
   const clearFormData = async () => {
     await setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
       image: null,
-    });
-    window.location.reload(); // Reload the page
-  };
+    })
+    window.location.reload() // Reload the page
+  }
   const submitForm = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      setSubmitting(true); // Start form submission
+      setSubmitting(true) // Start form submission
 
-      const formDataToSend = new FormData();
+      const formDataToSend = new FormData()
       for (const key in formData) {
-        formDataToSend.append(key, formData[key]);
+        formDataToSend.append(key, formData[key])
       }
 
       const result = await axios.post(
@@ -82,39 +82,32 @@ const RegisterPage = () => {
         formDataToSend,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
-        }
-      );
-      
+        },
+      )
+
       if (result.status === 200) {
-        console.log(result.data);
-        await clearFormData();
+        console.log(result.data)
+        await clearFormData()
       } else {
-        console.log(result.data);
+        console.log(result.data)
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error)
     } finally {
-      setSubmitting(false); // End form submission
+      setSubmitting(false) // End form submission
     }
-  };
+  }
   return (
     <div className="main-container">
-      <img
-        loading="lazy"
-        className="side-image"
-        src="../src/assets/butterfly.png"
-        alt="Butterfly"
-      />
-
       <div className="register-container">
         <h2 className="h2">Sign Up</h2>
 
         <form onSubmit={submitForm}>
           <Container>
             <Row className="justify-content-center">
-              <Col xs={12} className="text-center" style={{ width: "23%" }}>
+              <Col xs={12} className="text-center" style={{ width: '23%' }}>
                 <AvatarInput
                   imageURL={imageURL}
                   handleAvatarChange={handleAvatarChange}
@@ -174,7 +167,7 @@ const RegisterPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage
