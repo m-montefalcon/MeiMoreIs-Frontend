@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Nav from '../components/home_components/NavBarComponent'
 import CardsComponents from '../components/home_components/CardsComponents'
 import AddMemoryButton from '../components/home_components/AddMemoryButton'
-import useUserData from '../util/useUserData.js'
+import useUserData from '../../customHooks/useUserData'
 import axios from 'axios'
 
 axios.defaults.withCredentials = true
@@ -22,6 +22,7 @@ const HomePage = () => {
             withCredentials: true,
           })
           setApiData(response.data)
+          console.log(response.data)
         }
       } catch (error) {
         console.error('Error fetching API data:', error)

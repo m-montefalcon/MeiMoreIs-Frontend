@@ -4,7 +4,7 @@ import CoverPageComponent from '../components/profile_components/CoverPageCompon
 import ProfilePictureComponent from '../components/profile_components/ProfilePictureComponent'
 import NameComponent from '../components/profile_components/NameComponent'
 import CardsComponents from '../components/home_components/CardsComponents'
-import useUserData from '../util/useUserData'
+import useUserData from '../../customHooks/useUserData'
 import axios from 'axios'
 
 axios.defaults.withCredentials = true
@@ -25,6 +25,7 @@ const ProfilePage = () => {
             { withCredentials: true },
           )
           setApiData(response.data)
+          console.log(response.data)
         }
       } catch (error) {
         console.error('Error fetching API data:', error)
