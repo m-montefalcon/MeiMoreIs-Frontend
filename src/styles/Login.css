@@ -1,15 +1,17 @@
 .login-container {
-  position: absolute;
-  top: 50%;
-  right: 20%; /* Adjust the right distance as needed */
-  transform: translateY(-50%);
   width: 500px; /* Increase the width as needed */
   height: 400px; /* Increase the height as needed */
   border: 1px solid #ccc;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: auto; /* Center horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center;
 }
+
 .side-image {
   height: 50%;
   max-width: 50%;
@@ -19,12 +21,13 @@
 
 .main-container {
   height: 100vh;
+  margin: auto;
   background-color: #f9f9f9;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   display: flex;
-  justify-content: flex-end; /* Align content to the right */
+  justify-content: center; /* Align content to the right */
   align-items: center;
 }
 

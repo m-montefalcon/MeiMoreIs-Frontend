@@ -1,14 +1,15 @@
 .register-container {
-  position: absolute;
-  top: 50%;
-  right: 20%; /* Adjust the right distance as needed */
-  transform: translateY(-50%);
-  width: 500px; /* Increase the width as needed */
-  height: 550px; /* Increase the height as needed */
+  width: 600px; /* Increase the width as needed */
+  height: 600px; /* Increase the height as needed */
   border: 1px solid #ccc;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: auto; /* Center horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center;
 }
 
 h2 {
