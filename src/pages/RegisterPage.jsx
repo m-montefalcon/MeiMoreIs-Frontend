@@ -9,6 +9,7 @@ import Button from '../components/ButtonComponent'
 import Hyperlink from '../components/Hyperlink'
 import AvatarInput from '../components/AvatarInput'
 import '../styles/Register.css'
+import Swal from 'sweetalert2'
 
 const RegisterPage = () => {
   const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT
@@ -89,11 +90,34 @@ const RegisterPage = () => {
 
       if (result.status === 200) {
         console.log(result.data)
-        await clearFormData()
+        Swal.fire({
+          title: 'Successfully Registered',
+          icon: 'success',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            clearFormData()
+          }
+        })
       } else {
+        Swal.fire({
+          title: 'Successfully Registered',
+          text: `${response.data}`,
+          icon: 'error',
+        }).then((result) => {
+          if (result.isConfirmed) {
+          }
+        })
         console.log(result.data)
       }
     } catch (error) {
+      Swal.fire({
+        title: 'Failed to Register',
+        text: `${error.response.data}`,
+        icon: 'error',
+      }).then((result) => {
+        if (result.isConfirmed) {
+        }
+      })
       console.error('Error:', error)
     } finally {
       setSubmitting(false) // End form submission

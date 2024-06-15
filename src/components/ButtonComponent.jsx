@@ -1,6 +1,6 @@
-import React from "react";
-import "../../src/styles/Button.css";
-import ButtonBootstrap from "react-bootstrap/Button";
+import React from 'react'
+import '../../src/styles/Button.css'
+import ButtonBootstrap from 'react-bootstrap/Button'
 
 const ButtonComponent = (props) => {
   return (
@@ -10,10 +10,10 @@ const ButtonComponent = (props) => {
         type="submit"
         disabled={props.disabled}
       >
-        {props.text}
+        {props.isSubmitting ? 'Loading' : props.text}
       </ButtonBootstrap>
     </div>
-  );
-};
+  )
+}
 
-export default ButtonComponent;
+export default ButtonComponent
