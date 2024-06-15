@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import { saveUserDataToLocalStorage } from '../util/localStorageUtils.js'
+import Swal from 'sweetalert2'
+
 axios.defaults.withCredentials = true // Send cookies with requests
 
 const LoginPage = () => {
@@ -44,16 +46,58 @@ const LoginPage = () => {
         },
       })
       if (result.status === 200) {
-        saveUserDataToLocalStorage(result.data)
+        saveUserDataToLocalStorage(result.data) // Assuming this function saves user data to localStorage
         await clearFormData()
-        navigateTo('/home')
+        navigateTo('/home') // Navigate to home page after successful login
       } else {
-        console.log(result.data)
+        Swal.fire({
+          title: 'Failed to Login',
+          text: 'An unexpected error occurred. Please try again later.',
+          icon: 'error',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setSubmitting(false) // Stop form submission
+          }
+        })
       }
+      console.log(result)
     } catch (error) {
-      console.error('Error:', error)
-    } finally {
-      setSubmitting(false) // End form submission
+      if (error.response && error.response.status === 401) {
+        Swal.fire({
+          title: 'Login Failed',
+          text: 'Invalid email or password',
+          icon: 'error',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setSubmitting(false) // Stop form submission
+          }
+        })
+      } else if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error
+      ) {
+        Swal.fire({
+          title: 'Failed to Login',
+          text: error.response.data.error, // Display the specific error message from the API
+          icon: 'error',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setSubmitting(false) // Stop form submission
+          }
+        })
+      } else {
+        Swal.fire({
+          title: 'Failed to Login',
+          text: 'An unexpected error occurred. Please try again later.',
+          icon: 'error',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setSubmitting(false) // Stop form submission
+          }
+        })
+        console.log(error) // Log other errors for debugging
+      }
     }
   }
 
@@ -82,7 +126,11 @@ const LoginPage = () => {
                 minLength="8"
                 disabled={submitting}
               />
-              <ButtonComponent text="Login" />
+              <ButtonComponent
+                text="Login"
+                isSubmitting={submitting}
+                disabled={submitting}
+              />
               <Hyperlink text="Register Instead" link="/register" />
             </Form>
           </Container>
