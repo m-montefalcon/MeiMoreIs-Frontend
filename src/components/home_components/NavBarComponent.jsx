@@ -6,6 +6,10 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { removeUserDataFromLocalStorage } from '../../util/localStorageUtils.js'
 import { useLocation, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+axios.defaults.withCredentials = true
+const baseUrl = import.meta.env.VITE_BACKEND_API_ENDPOINT
 
 const NavBarComponent = (props) => {
   const navigate = useNavigate()
@@ -19,9 +23,21 @@ const NavBarComponent = (props) => {
     }
   }
 
-  const onLogout = () => {
-    removeUserDataFromLocalStorage()
-    navigate('/login')
+  const onLogout = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/user/logout`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      if (response.status === 200) {
+        removeUserDataFromLocalStorage()
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
