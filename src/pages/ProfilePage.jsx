@@ -54,7 +54,7 @@ const ProfilePage = () => {
               marginTop: '2%',
             }}
           >
-            <CoverPageComponent />
+            <CoverPageComponent coverPhoto = {userData.coverPhoto}/>
             <ProfilePictureComponent image={imageUrl} />
             <NameComponent />
           </div>
